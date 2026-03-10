@@ -1,12 +1,33 @@
-import express, { Express } from "express";
+import express from "express";
+import projectRoutes from "./api/v1/routes/projectRoutes";
+import {
+    accessLogger,
+    errorLogger,
+    consoleLogger,
+} from "./api/v1/middleware/logger";
+import errorHandler from "./api/v1/middleware/errorHandler";
+import adminRoutes from "./api/v1/routes/adminRoutes";
 
-// Initialize Express application
-const app: Express = express();
+const app = express();
 
-// Define a route
-app.get("/", (req, res) => {
-    res.send("Hello, World!");
-});
+// Logging middleware (should be applied early in the middleware stack)
+if (process.env.NODE_ENV === "production") {
+    // In production, log to files
+    app.use(accessLogger);
+    app.use(errorLogger);
+} else {
+    // In development, log to console for immediate feedback
+    app.use(consoleLogger);
+}
+
+// Body parsing middleware
+app.use(express.json());
+
+// Mount the admin routes
+app.use("/api/v1/admin", adminRoutes);
+
+// API Routes
+app.use("/api/v1", projectRoutes);
 
 
 app.get("/api/v1/health", (req, res) => {
@@ -17,5 +38,8 @@ app.get("/api/v1/health", (req, res) => {
         version: "1.0.0",
     });
 });
+
+// Global error handling middleware (MUST be applied last)
+app.use(errorHandler);
 
 export default app;
