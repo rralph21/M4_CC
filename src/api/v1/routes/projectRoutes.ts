@@ -8,23 +8,12 @@ import {
 
 const router = Router();
 
-/*
-GET /projects
-admin, lead, developer
-*/
 router.get(
     "/projects",authenticate,isAuthorized({ hasRole: ["admin", "lead", "developer"] }),getProjectsController
 );
 
-/*
-POST /projects
-admin, lead
-*/
-router.post(
-    "/projects",
-    authenticate,
-    isAuthorized({ hasRole: ["admin", "lead"] }),
-    createProjectController
+
+router.post("/projects",authenticate,isAuthorized({ hasRole: ["admin", "lead"] }),createProjectController
 );
 
 export default router;

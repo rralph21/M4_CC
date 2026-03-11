@@ -17,7 +17,7 @@ import { AuthorizationError } from "../errors/errors";
  * @param {AuthorizationOptions} opts - The authorization options.
  * @returns {MiddlewareFunction} The middleware function.
  */
-const isAuthorized = (opts: AuthorizationOptions): => {
+const isAuthorized = (opts: AuthorizationOptions) => {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
             const { role, uid } = res.locals;

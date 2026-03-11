@@ -23,11 +23,9 @@ if (process.env.NODE_ENV === "production") {
 // Body parsing middleware
 app.use(express.json());
 
-// Mount the admin routes
-app.use("/api/v1/admin", adminRoutes);
-
 // API Routes
 app.use("/api/v1", projectRoutes);
+app.use("/api/v1", adminRoutes);
 
 
 app.get("/api/v1/health", (req, res) => {
